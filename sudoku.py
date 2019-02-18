@@ -3,7 +3,7 @@ from sudoku_framework import *
 from graph_search import *
 
 
-class sudokuTable:
+class SudokuTable:
     def __init__(self):
         self.table = [[0 for x in range(0,4)] for y in range(0,4)]
         self.step = 0
@@ -74,10 +74,29 @@ class sudokuTable:
                     result = result + str(c) + '|'
             print(result)
 
+    def __str__(self):
+        result = '--sudoku step: %s --\n' % (str(self.step))
+        for line in self.table:
+            result = result + '    |'
+            for c in line:
+                if c == 0:
+                    result = result + ' ' + '|'
+                else:
+                    result = result + str(c) + '|'
+            result = result + '\n'
+        return result
+
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(other, SudokuTable):
+            return self.table == other.table
+        return False
+
+
 input = sys.argv
 values = input[1]
 values = list(values)
-mySudoku = sudokuTable()
+mySudoku = SudokuTable()
 
 cont = 0
 try:
@@ -92,9 +111,10 @@ except IndexError:
     print('seems like the sudoku is missing something, may be incorrect size!')
     exit(1)
 
-mySudoku.show_table()
-print('i have a solution:', mySudoku.is_solve())
-print(mySudoku.get_col(0))
-print(mySudoku.get_row(0))
+# mySudoku.show_table()
+print(mySudoku)
 my_a_star = sudoku_framework(mySudoku)
-graph_search(my_a_star)
+steps = graph_search(my_a_star)
+
+for i in steps:
+    print(i)

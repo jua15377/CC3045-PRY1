@@ -29,6 +29,7 @@ import copy
 def heuristic(list):
     last_sudoku = list[len(list) - 1]
     empty_cells = 0
+    full_cell = 0
     full_rows = 0
     full_columns = 0
     line_count = 0
@@ -41,41 +42,52 @@ def heuristic(list):
         for cell in line:
             if cell == 0:
                 empty_cells = empty_cells + 1
+            else:
+                full_cell = full_cell + 1
         line_count = line_count + 1
-    return (full_rows  + full_columns) - empty_cells
+    # return (full_rows + full_columns+ full_cell) - empty_cells
+    # return 3 * empty_cells - 2 * (full_rows + full_cell + full_columns)
+    return  16- (full_cell- empty_cells )
 
 def a_star(frontier, problem):
-    shortest = []
+    shortest = frontier[0]
     for path in frontier:
-        if len(shortest) == 0 or problem.pathCost(shortest) + heuristic(shortest) > problem.pathCost(path) + heuristic(path):
-            shortest.append(path)
+        p_cost = problem.pathCost(shortest)
+        h = heuristic(shortest)
+        actual = p_cost + h
+        new = problem.pathCost(path) + heuristic(path)
+        print('actual', actual, 'new', new)
+        if new <= actual:
+            shortest = path
+            # print(shortest)
     return shortest
 
 
 def graph_search(problem):
-    frontier = [problem.s0]
+    frontier = [[problem.s0]]
     explored = []
-
-    while True:
+    count = 0
+    while count < 50:
+        count = count + 1
         if len(frontier):
             path = a_star(frontier, problem)
+            # print("frontier", frontier)
+            # print("path", path)
             s = path[len(path)-1]
-            explored.append(path)
+            explored.append(s)
 
             if problem.goalTest(s):
+                print("SOLVED")
                 return path
 
             for a in problem.actions(s):
-                result = problem.results(s, a)
-                if all(result.table != a for a in explored):
-                    print(explored[0])
-                    print("explored", explored)
-                    print("result", result.show_table())
-
-                    new_path = []
+                result = problem.results(s, a) #returns a sudoku
+                # print(result)
+                if result not in explored:
+                    # print('explored', explored)
                     new_path = copy.deepcopy(path)
                     new_path.append(result)
                     frontier.append(new_path)
         else:
             return False
-
+    return path
