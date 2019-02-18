@@ -35,25 +35,26 @@ class sudoku_framework:
                     posible_result.append(num)
             return posible_result
 
-        for i in range(0, len(s.dimension)):
-            for j in range(0, len(s.dimension)):
-                if s[i][j] == 0:
+        for i in range(s.dimension):
+            for j in range(s.dimension):
+                if s.table[i][j] == 0:
                     entries = avaliable(s, i, j)
                     for n in entries:
                         new_s = copy.deepcopy(s)
                         new_s.table[i][j] = n
-                        if  all(new_s.table != action.table for action in actions_list):
+                        if all(new_s.table != action.table for action in actions_list):
                             actions_list.append(new_s)
         return actions_list
 
     def results(self, s, a):
-        pass
+        new_state = a
+        return new_state
 
     def goalTest(self, s):
         return s.is_solve()
 
     def stepCost(self, s, a, s_prime):
-        pass
+        return 1
 
     def pathCost(self, states):
-        pass
+        return len(states)

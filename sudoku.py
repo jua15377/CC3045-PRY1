@@ -1,5 +1,6 @@
 import sys
 from sudoku_framework import *
+from graph_search import *
 
 
 class sudokuTable:
@@ -40,7 +41,7 @@ class sudokuTable:
         for col_number in range(0, self.dimension):
             solve_list.append(self.check_col(self.table, col_number))
         # check cuadran
-        solve_list.append(self.check_cuadrant(self.able))
+        solve_list.append(self.check_cuadrant(self.table))
         return all(element is True for element in solve_list)
 
     def get_cuadrant(self, cord):
@@ -92,7 +93,8 @@ except IndexError:
     exit(1)
 
 mySudoku.show_table()
-print('i have a solution:', mySudoku.is_solve(mySudoku.table))
+print('i have a solution:', mySudoku.is_solve())
 print(mySudoku.get_col(0))
 print(mySudoku.get_row(0))
 my_a_star = sudoku_framework(mySudoku)
+graph_search(my_a_star)
