@@ -93,11 +93,14 @@ class SudokuTable:
         return False
 
 
-input = sys.argv
-values = input[1]
-values = list(values)
-mySudoku = SudokuTable()
-
+try:
+    input = sys.argv
+    values = input[1]
+    values = list(values)
+    mySudoku = SudokuTable()
+except IndexError:
+    print('no valid input!!')
+    exit(1)
 cont = 0
 try:
     for x in range(0,4):

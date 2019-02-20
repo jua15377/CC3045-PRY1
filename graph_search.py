@@ -31,6 +31,7 @@ def heuristic(list):
     empty_cells = 0
     full_cell = 0
     full_rows = 0
+    full_cuadrant = 0
     full_columns = 0
     line_count = 0
 
@@ -38,16 +39,18 @@ def heuristic(list):
         if last_sudoku.check_row(line):
             full_rows = full_rows + 1
         if last_sudoku.check_col(last_sudoku.table, line_count):
-            full_columns = full_columns +1
+            full_columns = full_columns + 1
+        if last_sudoku.check_cuadrant(last_sudoku.table):
+            full_columns = full_columns + 1
         for cell in line:
             if cell == 0:
-                empty_cells = empty_cells + 1
+                empty_cells += 1
             else:
                 full_cell = full_cell + 1
         line_count = line_count + 1
     # return (full_rows + full_columns+ full_cell) - empty_cells
-    # return 3 * empty_cells - 2 * (full_rows + full_cell + full_columns)
-    return  16- (full_cell- empty_cells )
+    return 3 * empty_cells - 2 * (full_rows + full_cell + full_columns)
+
 
 def a_star(frontier, problem):
     shortest = frontier[0]
@@ -56,8 +59,8 @@ def a_star(frontier, problem):
         h = heuristic(shortest)
         actual = p_cost + h
         new = problem.pathCost(path) + heuristic(path)
-        print('actual', actual, 'new', new)
-        if new <= actual:
+        # print('actual', actual, 'new', new)
+        if new < actual+1:
             shortest = path
             # print(shortest)
     return shortest
@@ -67,8 +70,9 @@ def graph_search(problem):
     frontier = [[problem.s0]]
     explored = []
     count = 0
-    while count < 50:
+    while True:
         count = count + 1
+        print(count)
         if len(frontier):
             path = a_star(frontier, problem)
             # print("frontier", frontier)
