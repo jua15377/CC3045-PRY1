@@ -1,7 +1,7 @@
 import sys
 from random import randint
 
-class sixtenn:
+class Sixtenn:
     def __init__(self, input):
         self.board = input
         self.empty_cell = input.index('.')
@@ -68,17 +68,103 @@ class sixtenn:
             return False
 
     def move(self, symbol):
-
         if not self.move_down(symbol):
             if not self.move_left(symbol):
                 if not self.move_up(symbol):
                     if self.move_right(symbol):
-                        return True
+                        return 'right'
                     else:
                         return False
+                else:
+                    return 'up'
+            else:
+                return 'left'
+        else:
+            return 'down'
 
-    def  is_solve(self):
+    def move_empty_up(self):
+        if self.empty_cell not in self.top_frontier:
+            new_index_of_empty = self.empty_cell - 4
+            symbol = self.board[new_index_of_empty]
+            self.board[self.empty_cell] = symbol
+            self.board[new_index_of_empty] = '.'
+            self.empty_cell = new_index_of_empty
+            return True
+        else:
+            return False
+
+    def move_empty_down(self):
+        if self.empty_cell not in self.bottom_frontier:
+            new_index_of_empty = self.empty_cell + 4
+            symbol = self.board[new_index_of_empty]
+            self.board[self.empty_cell] = symbol
+            self.board[new_index_of_empty] = '.'
+            self.empty_cell = new_index_of_empty
+            return True
+        else:
+            return False
+
+    def move_empty_left(self):
+        if self.empty_cell not in self.left_frontier:
+            new_index_of_empty = self.empty_cell - 1
+            symbol = self.board[new_index_of_empty]
+            self.board[self.empty_cell] = symbol
+            self.board[new_index_of_empty] = '.'
+            self.empty_cell = new_index_of_empty
+            return True
+        else:
+            return False
+
+    def move_empty_right(self):
+        if self.empty_cell not in self.right_frontier:
+            new_index_of_empty = self.empty_cell + 1
+            symbol = self.board[new_index_of_empty]
+            self.board[self.empty_cell] = symbol
+            self.board[new_index_of_empty] = '.'
+            self.empty_cell = new_index_of_empty
+            return True
+        else:
+            return False
+
+    def is_solve(self):
         return self.board == self.goal
+
+    def get_neighbor_by_index(self, index):
+        neighbor = []
+        try:
+            if index not in self.top_frontier:
+                neighbor.append(self.board[index-4])
+            else:
+                neighbor.append(None)
+        except IndexError:
+            neighbor.append(None)
+        try:
+            if index not in self.bottom_frontier:
+                neighbor.append(self.board[index+4])
+            else:
+                neighbor.append(None)
+        except IndexError:
+            neighbor.append(None)
+        try:
+            if index not in self.left_frontier:
+                neighbor.append(self.board[index-1])
+            else:
+                neighbor.append(None)
+        except IndexError:
+            neighbor.append(None)
+        try:
+            if index not in self.right_frontier:
+                neighbor.append(self.board[index+1])
+            else:
+                neighbor.append(None)
+        except IndexError:
+            neighbor.append(None)
+        return neighbor
+
+
+    def get_neighbor_by_symbol(self, symbol):
+        index_of_symbol = self.board.index(symbol)
+        return self.get_neighbor_by_index(index_of_symbol)
 
     def __str__(self):
         result = '--sixteen-- \n'
@@ -91,6 +177,12 @@ class sixtenn:
             result = result + '\n'
         return result
 
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(other, Sixtenn):
+            return self.board == other.board
+        return False
+
 try:
     input = sys.argv
     values = input[1]
@@ -99,20 +191,24 @@ try:
         print('no valid input!!')
         exit(1)
     else:
-        my_game = sixtenn(values)
+        my_game = Sixtenn(values)
 except IndexError:
     print('no valid input!!')
     exit(1)
 
 cont = 0
 
-while not my_game.is_solve():
-    cont += 1
-    symbol = my_game.board[randint(0,15)]
-    my_game.move(symbol)
-    print(symbol)
-    print(cont)
-    print(my_game)
+print(my_game)
+print(my_game.get_neighbor_by_symbol('F'))
+
+
+# while not my_game.is_solve():
+#     cont += 1
+#     symbol = my_game.board[randint(0,15)]
+#     my_game.move(symbol)
+#     print(symbol)
+#     print(cont)
+#     print(my_game)
 
 # my_game.move('4')
 # print(my_game)

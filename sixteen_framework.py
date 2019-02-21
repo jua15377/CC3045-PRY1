@@ -10,7 +10,7 @@ frontera?
 explorados, no explorados
 '''
 
-class sudoku_framework:
+class Sixteen_framework:
     def __init__(self, my_object):
         self.s0 = copy.deepcopy(my_object)
 
@@ -35,13 +35,13 @@ class sudoku_framework:
 
     def actions(self, s):
         actions_list = []
-        for x in range(s.dimension):
-            for y in range(s.dimension):
-                if s.table[x][y] == 0:
-                    entries = self.avaliable(s, x, y)
+        for i in range(s.dimension):
+            for j in range(s.dimension):
+                if s.table[i][j] == 0:
+                    entries = self.avaliable(s, i, j)
                     for n in entries:
                         new_s = copy.deepcopy(s)
-                        new_s.table[x][y] = n
+                        new_s.table[i][j] = n
                         if new_s not in actions_list:
                             actions_list.append(new_s)
         return actions_list

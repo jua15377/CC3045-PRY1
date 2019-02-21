@@ -113,8 +113,12 @@ except IndexError:
     print('seems like the sudoku is missing something, may be incorrect size!')
     exit(1)
 
+
 print('Input:')
 print(mySudoku)
+if mySudoku.is_solve():
+    print('i don\'t have nothing to do !:(')
+    exit(0)
 my_a_star = sudoku_framework(mySudoku)
 steps = graph_search(my_a_star)
 print('These are the steps to get the solution:')
