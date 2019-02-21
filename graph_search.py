@@ -24,6 +24,10 @@ def graph_search(problem):
             return Falss
 '''
 import copy
+from sixteen import *
+
+
+
 
 
 def heuristic(list):

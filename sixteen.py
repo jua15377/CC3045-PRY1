@@ -1,7 +1,8 @@
 import sys
+import copy
 from random import randint
 
-class Sixtenn:
+class Sixteen:
     def __init__(self, input):
         self.board = input
         self.empty_cell = input.index('.')
@@ -179,7 +180,7 @@ class Sixtenn:
 
     def __eq__(self, other):
         """Overrides the default implementation"""
-        if isinstance(other, Sixtenn):
+        if isinstance(other, Sixteen):
             return self.board == other.board
         return False
 
@@ -191,17 +192,27 @@ try:
         print('no valid input!!')
         exit(1)
     else:
-        my_game = Sixtenn(values)
+        my_game = Sixteen(values)
 except IndexError:
     print('no valid input!!')
     exit(1)
 
 cont = 0
+def not_sorted(game):
+    bad = 0
+    assert isinstance(game, Sixteen)
+    m = copy.deepcopy(game.board)
+    for i in range(len(game.goal)):
+        if m[i] != game.goal[i]:
+            bad += 1
+    return bad
+
 
 print(my_game)
-print(my_game.get_neighbor_by_symbol('F'))
+print(my_game.goal)
+print(not_sorted(my_game))
 
-
+# print(manhattan(my_game))
 # while not my_game.is_solve():
 #     cont += 1
 #     symbol = my_game.board[randint(0,15)]

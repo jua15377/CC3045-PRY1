@@ -1,4 +1,5 @@
 import copy
+from sixteen import Sixteen
 # state s
 '''
 Una función actions(s) → {a1,a2 , .., an-1, an}
@@ -10,44 +11,44 @@ frontera?
 explorados, no explorados
 '''
 
+
+def manhattan(game):
+    distance = 0
+    assert isinstance(game, Sixteen)
+    m = copy.deepcopy(game.board)
+    for i in range(len(game.goal)):
+        sym = m[i]
+        goal_cell = game.goal.index(sym)
+        dist = abs(i - goal_cell)
+        distance += dist
+    return distance
+
+
+def not_sorted(game):
+    bad = 0
+    assert isinstance(game, Sixteen)
+    m = copy.deepcopy(game.board)
+    for i in range(len(game.goal)):
+        if m[i] != game.goal[i]:
+            bad += 1
+    return bad
+
+
+
 class Sixteen_framework:
     def __init__(self, my_object):
         self.s0 = copy.deepcopy(my_object)
 
-    def avaliable(self, s, x, y):
-        posible_result = []
-        row = s.get_row(x)
-        col = s.get_col(y)
-        if x < 2:
-            if y < 2:
-                cuadrant = s.get_cuadrant(0)
-            else:
-                cuadrant = s.get_cuadrant(1)
-        else:
-            if y < 2:
-                cuadrant = s.get_cuadrant(2)
-            else:
-                cuadrant = s.get_cuadrant(3)
-        for num in range(1, s.dimension + 1):
-            if num not in row and num not in col and num not in cuadrant:
-                posible_result.append(num)
-        return posible_result
-
     def actions(self, s):
-        actions_list = []
-        for i in range(s.dimension):
-            for j in range(s.dimension):
-                if s.table[i][j] == 0:
-                    entries = self.avaliable(s, i, j)
-                    for n in entries:
-                        new_s = copy.deepcopy(s)
-                        new_s.table[i][j] = n
-                        if new_s not in actions_list:
-                            actions_list.append(new_s)
-        return actions_list
+        assert isinstance(s, Sixteen)
+        nb =  s.get_neighbor_by_symbol('.')
+        return nb
 
     def results(self, s, a):
-        new_state = a
+        assert isinstance(s, Sixteen)
+        if a is not None:
+            new_state = copy.deepcopy(s)
+            new_state.move(a)
         return new_state
 
     def goalTest(self, s):
@@ -57,5 +58,5 @@ class Sixteen_framework:
         return 1
 
     def pathCost(self, states):
-        # return len(states)
-        return 1
+        return len(states)
+        # return 1
