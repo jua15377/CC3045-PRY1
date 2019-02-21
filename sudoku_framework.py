@@ -14,35 +14,35 @@ class sudoku_framework:
     def __init__(self, my_object):
         self.s0 = copy.deepcopy(my_object)
 
+    def avaliable(self, s, x, y):
+        posible_result = []
+        row = s.get_row(x)
+        col = s.get_col(y)
+        if x < 2:
+            if y < 2:
+                cuadrant = s.get_cuadrant(0)
+            else:
+                cuadrant = s.get_cuadrant(1)
+        else:
+            if y < 2:
+                cuadrant = s.get_cuadrant(2)
+            else:
+                cuadrant = s.get_cuadrant(3)
+        for num in range(1, s.dimension + 1):
+            if num not in row and num not in col and num not in cuadrant:
+                posible_result.append(num)
+        return posible_result
+
     def actions(self, s):
         actions_list = []
-        def avaliable(s, x, y):
-            posible_result = []
-            row = s.get_row(x)
-            col = s.get_col(y)
-            if x <2:
-                if y < 2:
-                    cuadrant = s.get_cuadrant(0)
-                else:
-                    cuadrant = s.get_cuadrant(2)
-            else:
-                if y < 2:
-                    cuadrant = s.get_cuadrant(1)
-                else:
-                    cuadrant = s.get_cuadrant(3)
-            for num in range(1, s.dimension + 1):
-                if num not in row and num not in col and num not in cuadrant:
-                    posible_result.append(num)
-            return posible_result
-
         for i in range(s.dimension):
             for j in range(s.dimension):
                 if s.table[i][j] == 0:
-                    entries = avaliable(s, i, j)
+                    entries = self.avaliable(s, i, j)
                     for n in entries:
                         new_s = copy.deepcopy(s)
                         new_s.table[i][j] = n
-                        if all(new_s.table != action.table for action in actions_list):
+                        if new_s not in actions_list:
                             actions_list.append(new_s)
         return actions_list
 
@@ -57,4 +57,5 @@ class sudoku_framework:
         return 1
 
     def pathCost(self, states):
-        return len(states)
+        # return len(states)
+        return 1

@@ -30,68 +30,53 @@ def heuristic(list):
     last_sudoku = list[len(list) - 1]
     empty_cells = 0
     full_cell = 0
-    full_rows = 0
     full_cuadrant = 0
-    full_columns = 0
-    line_count = 0
 
     for line in last_sudoku.table:
-        if last_sudoku.check_row(line):
-            full_rows = full_rows + 1
-        if last_sudoku.check_col(last_sudoku.table, line_count):
-            full_columns = full_columns + 1
-        if last_sudoku.check_cuadrant(last_sudoku.table):
-            full_columns = full_columns + 1
         for cell in line:
             if cell == 0:
                 empty_cells += 1
             else:
-                full_cell = full_cell + 1
-        line_count = line_count + 1
-    # return (full_rows + full_columns+ full_cell) - empty_cells
-    return 3 * empty_cells - 2 * (full_rows + full_cell + full_columns)
+                full_cell += 1
+    return empty_cells - full_cuadrant
 
-
-def a_star(frontier, problem):
+def a_star(frontier, framw_work):
     shortest = frontier[0]
     for path in frontier:
-        p_cost = problem.pathCost(shortest)
+        p_cost = framw_work.pathCost(shortest)
         h = heuristic(shortest)
         actual = p_cost + h
-        new = problem.pathCost(path) + heuristic(path)
-        # print('actual', actual, 'new', new)
-        if new < actual+1:
+        new = framw_work.pathCost(path) + heuristic(path)
+        if new < actual:
             shortest = path
-            # print(shortest)
     return shortest
 
 
-def graph_search(problem):
-    frontier = [[problem.s0]]
+def graph_search(framw_work):
+    frontier = [[framw_work.s0]]
     explored = []
     count = 0
     while True:
         count = count + 1
-        print(count)
+        if count > 1000:
+            print('can\'t get the answer, sorry!\n so far i get:\n')
+            return path
         if len(frontier):
-            path = a_star(frontier, problem)
+            path = a_star(frontier, framw_work)
             # print("frontier", frontier)
             # print("path", path)
-            s = path[len(path)-1]
+            s = copy.deepcopy(path[len(path)-1])
             explored.append(s)
 
-            if problem.goalTest(s):
+            if framw_work.goalTest(s):
                 print("SOLVED")
                 return path
 
-            for a in problem.actions(s):
-                result = problem.results(s, a) #returns a sudoku
-                # print(result)
+            for a in framw_work.actions(s):
+                result = framw_work.results(s, a)
                 if result not in explored:
-                    # print('explored', explored)
                     new_path = copy.deepcopy(path)
                     new_path.append(result)
                     frontier.append(new_path)
         else:
             return False
-    return path

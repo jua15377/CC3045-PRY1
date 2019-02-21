@@ -6,7 +6,6 @@ from graph_search import *
 class SudokuTable:
     def __init__(self):
         self.table = [[0 for x in range(0,4)] for y in range(0,4)]
-        self.step = 0
         self.goal = 10
         self.dimension = 4
 
@@ -75,7 +74,7 @@ class SudokuTable:
             print(result)
 
     def __str__(self):
-        result = '--sudoku step: %s --\n' % (str(self.step))
+        result = '--sudoku step: --\n'
         for line in self.table:
             result = result + '    |'
             for c in line:
@@ -114,10 +113,10 @@ except IndexError:
     print('seems like the sudoku is missing something, may be incorrect size!')
     exit(1)
 
-# mySudoku.show_table()
+print('Input:')
 print(mySudoku)
 my_a_star = sudoku_framework(mySudoku)
 steps = graph_search(my_a_star)
-
+print('These are the steps to get the solution:')
 for i in steps:
     print(i)
