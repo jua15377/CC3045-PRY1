@@ -44,7 +44,7 @@ def graph_search(framw_work):
     count = 0
     while True:
         count = count + 1
-        if count > 1000:
+        if count > 500:
             print('can\'t get the answer, sorry!\n so far i get:\n')
             return path
         if len(frontier):

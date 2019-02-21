@@ -1,4 +1,5 @@
 import copy
+import math
 # state s
 '''
 Una función actions(s) → {a1,a2 , .., an-1, an}
@@ -12,14 +13,13 @@ explorados, no explorados
 
 
 def manhattan(game):
-    distance = 0
+    dist = 0
     m = copy.deepcopy(game.board)
     for i in range(len(game.goal)):
         sym = m[i]
         goal_cell = game.goal.index(sym)
-        dist = abs(i - goal_cell)
-        distance += dist
-    return distance
+        dist += distance(i, goal_cell)
+    return dist
 
 
 def not_sorted(game):
@@ -30,14 +30,26 @@ def not_sorted(game):
             bad += 1
     return bad
 
+def distance(index_a, index_b):
+    # Section A
+    floor_a = math.floor(index_a / 4)
+    module_a = index_a % 4
+
+    # Section B
+    floor_b = math.floor(index_b / 4)
+    module_b = index_b % 4
+    return abs(floor_a - floor_b) + abs(module_a - module_b)
+
 
 class Framework:
     def __init__(self, my_object):
         self.s0 = copy.deepcopy(my_object)
 
+
     def actions(self, s):
-        nb =  s.get_neighbor_by_symbol('.')
-        return nb
+        nb = s.get_neighbor_by_symbol('.')
+        new_nb = filter(None, nb)
+        return new_nb
 
     def results(self, s, a):
         if a is not None:
@@ -59,4 +71,5 @@ class Framework:
 
     def heuristic(self, list):
         last = list[len(list) - 1]
-        return manhattan(last) + not_sorted(last)
+        # return not_sorted(last)
+        return (manhattan(last) + not_sorted(last) )*-1
