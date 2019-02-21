@@ -59,3 +59,17 @@ class sudoku_framework:
     def pathCost(self, states):
         # return len(states)
         return 1
+
+    def heuristic(self, list):
+        last_sudoku = list[len(list) - 1]
+        empty_cells = 0
+        full_cell = 0
+        full_cuadrant = 0
+
+        for line in last_sudoku.table:
+            for cell in line:
+                if cell == 0:
+                    empty_cells += 1
+                else:
+                    full_cell += 1
+        return empty_cells - full_cuadrant

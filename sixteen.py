@@ -1,6 +1,7 @@
+from sixteen_framework import Framework
+from graph_search import *
 import sys
-import copy
-from random import randint
+
 
 class Sixteen:
     def __init__(self, input):
@@ -198,19 +199,18 @@ except IndexError:
     exit(1)
 
 cont = 0
-def not_sorted(game):
-    bad = 0
-    assert isinstance(game, Sixteen)
-    m = copy.deepcopy(game.board)
-    for i in range(len(game.goal)):
-        if m[i] != game.goal[i]:
-            bad += 1
-    return bad
 
 
+print('Input:')
 print(my_game)
-print(my_game.goal)
-print(not_sorted(my_game))
+if my_game.is_solve():
+    print('i don\'t have nothing to do !:(')
+    exit(0)
+my_a_star = Framework(my_game)
+steps = graph_search(my_a_star)
+print('These are the steps to get the solution:')
+for i in steps:
+    print(i)
 
 # print(manhattan(my_game))
 # while not my_game.is_solve():

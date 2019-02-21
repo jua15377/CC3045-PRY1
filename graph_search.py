@@ -24,33 +24,15 @@ def graph_search(problem):
             return Falss
 '''
 import copy
-from sixteen import *
 
-
-
-
-
-def heuristic(list):
-    last_sudoku = list[len(list) - 1]
-    empty_cells = 0
-    full_cell = 0
-    full_cuadrant = 0
-
-    for line in last_sudoku.table:
-        for cell in line:
-            if cell == 0:
-                empty_cells += 1
-            else:
-                full_cell += 1
-    return empty_cells - full_cuadrant
 
 def a_star(frontier, framw_work):
     shortest = frontier[0]
     for path in frontier:
         p_cost = framw_work.pathCost(shortest)
-        h = heuristic(shortest)
+        h = framw_work.heuristic(shortest)
         actual = p_cost + h
-        new = framw_work.pathCost(path) + heuristic(path)
+        new = framw_work.pathCost(path) + framw_work.heuristic(path)
         if new < actual:
             shortest = path
     return shortest

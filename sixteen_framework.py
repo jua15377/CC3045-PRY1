@@ -1,5 +1,4 @@
 import copy
-from sixteen import Sixteen
 # state s
 '''
 Una función actions(s) → {a1,a2 , .., an-1, an}
@@ -14,7 +13,6 @@ explorados, no explorados
 
 def manhattan(game):
     distance = 0
-    assert isinstance(game, Sixteen)
     m = copy.deepcopy(game.board)
     for i in range(len(game.goal)):
         sym = m[i]
@@ -26,7 +24,6 @@ def manhattan(game):
 
 def not_sorted(game):
     bad = 0
-    assert isinstance(game, Sixteen)
     m = copy.deepcopy(game.board)
     for i in range(len(game.goal)):
         if m[i] != game.goal[i]:
@@ -34,21 +31,20 @@ def not_sorted(game):
     return bad
 
 
-
-class Sixteen_framework:
+class Framework:
     def __init__(self, my_object):
         self.s0 = copy.deepcopy(my_object)
 
     def actions(self, s):
-        assert isinstance(s, Sixteen)
         nb =  s.get_neighbor_by_symbol('.')
         return nb
 
     def results(self, s, a):
-        assert isinstance(s, Sixteen)
         if a is not None:
             new_state = copy.deepcopy(s)
             new_state.move(a)
+        else:
+            new_state = copy.deepcopy(s)
         return new_state
 
     def goalTest(self, s):
@@ -60,3 +56,7 @@ class Sixteen_framework:
     def pathCost(self, states):
         return len(states)
         # return 1
+
+    def heuristic(self, list):
+        last = list[len(list) - 1]
+        return manhattan(last) + not_sorted(last)
